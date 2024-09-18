@@ -1,12 +1,25 @@
 #include "mbed.h"
-
+#include "arm_book_lib.h"
 
 int main()
 {
-    DigitalIn B1_USER(BUTTON1);
-    DigitalOut LD2(LED2);
+    DigitalIn gasDetector(D2);
+
+    DigitalOut alarmLed(LED1);
+
+    gasDetector.mode(PullDown);
+
+    alarmLed = OFF;
     
-    while (true){
-        LD2 = B1_USER;
+    while (true)
+    {
+        if(gasDetector == ON)
+        {
+            alarmLed = ON;
+        }
+        if(gasDetector == OFF)
+        {
+            alarmLed = OFF;
+        }
     }
 }
