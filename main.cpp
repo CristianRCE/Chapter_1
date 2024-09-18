@@ -3,23 +3,31 @@
 
 int main()
 {
+    // DIGITAL INPUTS
     DigitalIn gasDetector(D2);
-
+    DigitalIn overTempDetector(D3);
+    DigitalIn alarmOffButton(D4);
+    //DIGITAL OUTPUTS
     DigitalOut alarmLed(LED1);
-
+    //INPUT STATES
     gasDetector.mode(PullDown);
-
+    overTempDetector.mode(PullDown);
+    alarmOffButton.mode(PullDown);
+    // INITIAL STATES
     alarmLed = OFF;
-    
+    //BOOLEAN STATES
+    bool alarmState = OFF;
+
     while (true)
     {
-        if(gasDetector == ON)
+        if(gasDetector || overTempDetector)
         {
-            alarmLed = ON;
+            alarmState = ON;
         }
-        if(gasDetector == OFF)
+        if(alarmOffButton == ON)
         {
-            alarmLed = OFF;
+            alarmState = OFF;
         }
+        alarmLed = alarmState;
     }
 }
