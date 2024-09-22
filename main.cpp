@@ -6,9 +6,9 @@ int main()
     // DIGITAL INPUTS
     DigitalIn gasDetector(D2);
     DigitalIn overTempDetector(D3);
-    DigitalIn alarmOffButton(D4);
+    DigitalIn alarmOffButton(BUTTON1);
     //DIGITAL OUTPUTS
-    DigitalOut alarmLed(LED1);
+    DigitalOut alarmLed(LED2);
     //INPUT STATES
     gasDetector.mode(PullDown);
     overTempDetector.mode(PullDown);
@@ -24,10 +24,14 @@ int main()
         {
             alarmState = ON;
         }
-        if(alarmOffButton == ON)
+
+        alarmLed = alarmState;
+
+        if(alarmOffButton)
         {
             alarmState = OFF;
         }
+
         alarmLed = alarmState;
     }
 }
