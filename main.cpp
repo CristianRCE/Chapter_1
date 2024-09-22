@@ -6,32 +6,63 @@ int main()
     // DIGITAL INPUTS
     DigitalIn gasDetector(D2);
     DigitalIn overTempDetector(D3);
-    DigitalIn alarmOffButton(BUTTON1);
+    DigitalIn aButton(D4);
+    DigitalIn bButton(D5);
+    DigitalIn cButton(D6);
+    DigitalIn dButton(D7);
+    DigitalIn enterButton(BUTTON1);
     //DIGITAL OUTPUTS
-    DigitalOut alarmLed(LED2);
+    DigitalOut alarmLed(LED1);
+    DigitalOut incorrectCodeLed(LED2);
+    DigitalOut systemBlockedLed(LED3);
     //INPUT STATES
     gasDetector.mode(PullDown);
     overTempDetector.mode(PullDown);
-    alarmOffButton.mode(PullDown);
+    aButton.mode(PullDown);
+    bButton.mode(PullDown);
+    cButton.mode(PullDown);
+    dButton.mode(PullDown);
+    enterButton.mode(PullDown);
     // INITIAL STATES
     alarmLed = OFF;
-    //BOOLEAN STATES
+    incorrectCodeLed = OFF;
+    systemBlockedLed = OFF;
+    //BOOLEAN VARIABLES
     bool alarmState = OFF;
+    int numberOfIncorrectCodes = 0;
 
     while (true)
     {
-        if(gasDetector || overTempDetector)
+        if ( gasDetector || overTempDetector ) 
         {
             alarmState = ON;
         }
 
         alarmLed = alarmState;
 
-        if(alarmOffButton)
+        if ( numberOfIncorrectCodes < 5) 
         {
-            alarmState = OFF;
+            if (aButton && bButton && cButton && dButton && !enterButton) 
+            {
+                incorrectCodeLed = OFF;
+            } 
+            if (enterButton && !incorrectCodeLed && alarmState ) 
+            {
+                if (aButton && bButton && !cButton && !dButton) 
+                {
+                    alarmState = OFF;
+                    numberOfIncorrectCodes = 0;
+                }
+                else 
+                {
+                    incorrectCodeLed = ON;
+                    numberOfIncorrectCodes++;
+                }
+            }
         }
-
-        alarmLed = alarmState;
+        else 
+        {
+            systemBlockedLed = ON;
+        }
     }
 }
